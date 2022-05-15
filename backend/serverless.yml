@@ -1,0 +1,46 @@
+service: backend
+frameworkVersion: '2 || 3'
+
+custom:
+  # name for the S3 bucket that will contain boards
+  boardsBucketName: urtask-boards-${sls:stage}
+
+provider:
+  name: aws
+  runtime: python3.8
+  lambdaHashingVersion: '20201221'
+  region: us-east-1
+  environment:
+    BOARDS_BUCKET_NAME: ${self:custom.boardsBucketName}
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
+
+resources:
+  Resources:
+    # S3 bucket that contains individual boards
+    boardsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        # name of the bucket we configured earlier
+        BucketName: ${self:custom.boardsBucketName}
+        # configure to accept requests from all origins
+        CorsConfiguration:
+          CorsRules:
+            -
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+                - HEAD
+              MaxAge: 3000
