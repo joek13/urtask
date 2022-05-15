@@ -1,0 +1,44 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Board",
+    "description": "Schema for a task board.",
+    "properties": {
+        "name": {
+            "description": "Name of this board.",
+            "type": "string"
+        },
+        "lists": {
+            "description": "Lists belonging to this board.",
+            "type": "array",
+            "items": {
+                "description": "List that can contain tasks.",
+                "properties": {
+                    "name": {
+                        "description": "Name of this list.",
+                        "type": "string"
+                    },
+                    "tasks": {
+                        "description": "Tasks belonging to this list.",
+                        "type": "array",
+                        "items": {
+                            "description": "Single task on a list.",
+                            "type": "object",
+                            "properties": {
+                                "body": {
+                                    "description": "Task body text.",
+                                    "type": "string"
+                                },
+                                "due": {
+                                    "description": "Due date for this task",
+                                    "type": "string",
+                                    "format": "date"
+                                }
+                            }
+                        }
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}
