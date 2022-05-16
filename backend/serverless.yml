@@ -1,9 +1,16 @@
 service: backend
 frameworkVersion: '2 || 3'
+	
+plugins:
+  # use serverless-python-requirements plugin to install pip dependencies
+  - serverless-python-requirements
 
 custom:
   # name for the S3 bucket that will contain boards
   boardsBucketName: urtask-boards-${sls:stage}
+  # use docker container to build/package dependencies
+  pythonRequirements:
+    dockerizePip: non-linux
 
 provider:
   name: aws
@@ -14,11 +21,29 @@ provider:
     BOARDS_BUCKET_NAME: ${self:custom.boardsBucketName}
 
 functions:
-  hello:
-    handler: handler.hello
+  create_board:
+    handler: handler.create_board
     events:
       - httpApi:
-          path: /
+          path: /boards
+          method: post
+  update_board:
+    handler: handler.update_board
+    events:
+      - httpApi:
+          path: /boards/{board_id}
+          method: put
+  delete_board:
+    handler: handler.delete_board
+    events:
+      - httpApi:
+          path: /boards/{board_id}
+          method: delete
+  get_board:
+    handler: handler.get_board
+    events:
+      - httpApi:
+          path: /boards/{board_id}
           method: get
 
 resources:
