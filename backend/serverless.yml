@@ -19,6 +19,16 @@ provider:
   region: us-east-1
   environment:
     BOARDS_BUCKET_NAME: ${self:custom.boardsBucketName}
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "s3:ListBucket"
+            - "s3:PutObject"
+            - "s3:GetObject"
+            - "s3:DeleteObject"
+          Resource: "arn:aws:s3:::${self:custom.boardsBucketName}/*"
 
 functions:
   create_board:
