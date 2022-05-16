@@ -28,7 +28,9 @@ provider:
             - "s3:PutObject"
             - "s3:GetObject"
             - "s3:DeleteObject"
-          Resource: "arn:aws:s3:::${self:custom.boardsBucketName}/*"
+          Resource: 
+          - "arn:aws:s3:::${self:custom.boardsBucketName}"
+          - "arn:aws:s3:::${self:custom.boardsBucketName}/*"
 
 functions:
   create_board:
